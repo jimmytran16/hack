@@ -1,0 +1,21 @@
+.btn-secondary {
+    color: #fff;
+    background-color: #b7b4b2!important;
+    border-color: #c3c2c1!important;
+}
+
+
+
+
+/*form_component*/
+
+.doc_form{
+    display: inline-block;
+}
+.doc_form img {
+    vertical-align: top!important;
+    margin-left: 50px!important;
+}
+.download_form{
+    display: inline;
+}

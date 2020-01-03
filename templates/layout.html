@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="utf-8">
+    {% include 'includes/_dashlinks.html' %}
+    {% include 'includes/_generallinks.html' %}
+    {% include 'includes/_formcomplinks.html' %}
+    {% include 'includes/basictablelinks.html' %}
+<title>Document</title>
+</head>
+<body>
+    {% include 'includes/_sidebar.html' %}
+    {% block body %}
+    {% endblock %}
+</body>
+</html>

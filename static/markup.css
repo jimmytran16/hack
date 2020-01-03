@@ -1,0 +1,35 @@
+.bg-light {
+    background-color:#e4e3e3!important;
+}
+
+.h1, h1 {
+    font-size: 3.5rem!important;
+}
+
+body{
+    color: #ffffff!important;
+}
+/* MAIN.HTML */
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+bottom: .5em;
+}
+
+/* background picture of the school */
+.masthead {
+    height: 100vh;
+    min-height: 500px;
+    background-image: url('https://jcj-prod.s3.amazonaws.com/media/CACHE/images/media/image/b13020_01_n103_3k/44e2433a929c45ccdc84070f83dafb7e.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
