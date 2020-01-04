@@ -11,7 +11,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="dashboard.html" class="logo"><b>HPS<span>PORTAL</span></b></a>
+      <a href="dashboard" class="logo"><b>HPS<span>PORTAL</span></b></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
@@ -200,6 +200,11 @@
       </div>
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
+          {% block content %}
+          {% if not error %}
+          <li ><p class="welcome_message_name">Welcome, {{name}}</p></li>
+          {% endif %}
+          {% endblock content %}
           <li><a class="logout" href="logout">Logout</a></li>
         </ul>
       </div>

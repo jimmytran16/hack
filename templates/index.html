@@ -8,13 +8,18 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ url_for('static', filename='img/favicon.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='markup.css') }}">
+  <style>
+  .errormsg_span{
+    padding-right: 30px;
+  }
+  </style>
 </head>
 <!-- Full Page Image Header with Vertically Centered Content -->
 
 <body>
    
   <nav class="navbar-fixed-top navbar navbar-expand-lg navbar-light bg-light ">
-            <img width="" height="40px" src="img/haverhillogo.jpeg" alt="">
+            <img width="" height="40px" src="{{ url_for('static',filename='img/haverhillogo.jpeg') }}" alt="">
         <a class="navbar-brand" href="#">Haverhill Public Schools</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -43,9 +48,14 @@
             </li>
           </ul>
           <!-- Will return the validateform() function as true or false depending on login -->
-          <form action="dashboard" name="loginform" class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" name="usr" placeholder="Username" >
-            <input type="password" name="pword" class="form-control mr-sm-2"  placeholder="Password" >
+          <form action="login" method="POST" name="loginform" class="form-inline my-2 my-lg-0">
+            {% block content %}
+            {% if error %}
+              <span class="errormsg_span" style="color:red">{{ message }}</span>
+            {% endif %}
+            {% endblock content %}
+            <input class="form-control mr-sm-2" type="text" name="username" placeholder="Username" >
+            <input type="password" name="password" class="form-control mr-sm-2"  placeholder="Password" >
 
             <button class="btn btn-secondary" type="submit">Log in</button>
           </form>
