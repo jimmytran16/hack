@@ -227,6 +227,12 @@
           <div class="form-panel">
             <h4 class="mb"><i class="fa fa-angle-right"></i>Today's Uploaded Documents</h4>
             <h3>IMAGE OF DOCS</h3>
+            {% if images!=None %}
+              {% for img_url in images %}
+              <img src="{{ url_for('static', filename='docs/' + img_url) }}" height="700px" width="430px" />
+              {% endfor %}
+            {% endif %}
+  
           </div>
         </div>
         <!-- col-lg-12-->

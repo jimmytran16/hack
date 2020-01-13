@@ -4,7 +4,8 @@ from passlib.hash import sha256_crypt
 # mysql db module
 from flask_mysqldb import MySQL
 from datetime import date
-# file to blob
+
+# for encoding and decoding images
 import base64
 import io
 
@@ -69,40 +70,55 @@ def upload():
     mysql.connection.commit()
     return redirect(url_for('forms'))
 
-#fetch image from database
-@app.route('/showImage')
-def getImage():
-    cur = mysql.connection.cursor()
-    query = 'SELECT * FROM uploads;'
-    cur.execute(query)
-    data = cur.fetchall()
-    cur.close()
-    for row in data:
-        file_like = io.BytesIO(row[1])
-        file = PIL.Image.open(file_like)
-        target = os.path.join('/images/','folder-save')
-        if not os.path.isdir(target):
-            os.makedirs(target)
-        destination = '/'.join([target,row[0]])
-        file.save(destination)
-
 @app.route('/dashboard')
 def dashboard():
+    if not autho_login():
+        return redirect('/')
     return render_template('dashboard.html', login= True, name = session['fullname'])
 
 # student behavoir chart
 @app.route('/behavior')
 def general():
+    if not autho_login():
+        return redirect('/')
     return render_template('general.html')
 
 # student forms - incident / behavior
 @app.route('/forms')
 def forms():
+    if not autho_login():
+        return redirect('/')
+    cur = mysql.connection.cursor()
+    query = 'SELECT * FROM uploads;'
+    cur.execute(query)
+    data = cur.fetchall()
+    cur.close()
+    # check if there are any forms in the DB
+    if data == None:
+        return render_template('forms_component.html')
+    # if not then iterate through the data by rows
+    else:
+        #get the BLOB data from rows
+        #convert from binary to string representation
+        #get the filename, then store in local folder
+        doc_list = []
+        for row in data:
+            ext_to_save = 'static/docs/'+row[0]
+            filename = row[0]
+            file_blob = row[1]
+            imgdata = base64.b64decode(file_blob)
+            with open(ext_to_save, 'wb') as f:
+                f.write(imgdata)
+            doc_list.append(filename)
+        print(doc_list)
+        return render_template('form_component.html',images = doc_list)
     return render_template('form_component.html')
 
 # student records - grades
 @app.route('/records')
 def students():
+    if not autho_login():
+        return redirect('/')
     cur = mysql.connection.cursor()
     query = 'SELECT * from student'
     cur.execute(query)
@@ -128,7 +144,15 @@ def students():
 
 @app.route('/logout')
 def logout():
+    session['fullname'] = None
     return render_template('index.html')
+
+# function to determine if user is logged in or not
+def autho_login():
+    if session['fullname']!=None:
+        return True
+    else:
+        return False
 
 #condition to run the app.py
 if __name__ == '__main__':
