@@ -22,3 +22,17 @@
     color: black!important;
     background-color: #efefef!important;
 }
+
+
+/* basic_table - font size increase */
+
+table.table a {
+    margin: 0;
+    color: #212529;
+    font-size: 15px;
+}
+
+.table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+    border: 1px solid #ddd;
+    font-size: 15px;
+}

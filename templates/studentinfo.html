@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Student's info</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+
 <body>
     <div class="container">
         <div class="row my-2">
@@ -52,32 +55,38 @@
                                 <span class="badge badge-danger"><i class="fa fa-eye"></i> 245 Views</span>
                             </div>
                             <div class="col-md-12">
-                                <h5 class="mt-2"><span class="fa fa-clock-o ion-clock float-right"></span> Recent Activity</h5>
+                                <h5 class="mt-2"><span class="fa fa-clock-o ion-clock float-right"></span> Teacher's log
+                                </h5>
                                 <table class="table table-sm table-hover table-striped">
-                                    <tbody>                                    
+                                    <tbody>
                                         <tr>
                                             <td>
-                                                <strong>Abby</strong> joined ACME Project Team in <strong>`Collaboration`</strong>
+                                                <strong>Abby</strong> joined ACME Project Team in
+                                                <strong>`Collaboration`</strong>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <strong>Gary</strong> deleted My Board1 in <strong>`Discussions`</strong>
+                                                <strong>Gary</strong> deleted My Board1 in
+                                                <strong>`Discussions`</strong>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <strong>Kensington</strong> deleted MyBoard3 in <strong>`Discussions`</strong>
+                                                <strong>Kensington</strong> deleted MyBoard3 in
+                                                <strong>`Discussions`</strong>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <strong>John</strong> deleted My Board1 in <strong>`Discussions`</strong>
+                                                <strong>John</strong> deleted My Board1 in
+                                                <strong>`Discussions`</strong>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <strong>Skell</strong> deleted his post Look at Why this is.. in <strong>`Discussions`</strong>
+                                                <strong>Skell</strong> deleted his post Look at Why this is.. in
+                                                <strong>`Discussions`</strong>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -88,36 +97,41 @@
                     </div>
                     <div class="tab-pane" id="messages">
                         <div class="alert alert-info alert-dismissable">
-                            <a class="panel-close close" data-dismiss="alert">×</a> This is an <strong>.alert</strong>. Use this to show important messages to the user.
+                            <a class="panel-close close" data-dismiss="alert">×</a> This is an <strong>.alert</strong>.
+                            Use this to show important messages to the user.
                         </div>
                         <table class="table table-hover table-striped">
-                            <tbody>                                    
+                            <tbody>
                                 <tr>
                                     <td>
-                                       <span class="float-right font-weight-bold">3 hrs ago</span> Parent information:
+                                        <span class="float-right font-weight-bold">3 hrs ago</span> Parent information:
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                       <span class="float-right font-weight-bold">Yesterday</span> There has been a request on your account since that was..
+                                        <span class="float-right font-weight-bold">Yesterday</span> There has been a
+                                        request on your account since that was..
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                       <span class="float-right font-weight-bold">9/10</span> Porttitor vitae ultrices quis, dapibus id dolor. Morbi venenatis lacinia rhoncus. 
+                                        <span class="float-right font-weight-bold">9/10</span> Porttitor vitae ultrices
+                                        quis, dapibus id dolor. Morbi venenatis lacinia rhoncus.
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                       <span class="float-right font-weight-bold">9/4</span> Vestibulum tincidunt ullamcorper eros eget luctus. 
+                                        <span class="float-right font-weight-bold">9/4</span> Vestibulum tincidunt
+                                        ullamcorper eros eget luctus.
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                       <span class="float-right font-weight-bold">9/4</span> Maxamillion ais the fix for tibulum tincidunt ullamcorper eros. 
+                                        <span class="float-right font-weight-bold">9/4</span> Maxamillion ais the fix
+                                        for tibulum tincidunt ullamcorper eros.
                                     </td>
                                 </tr>
-                            </tbody> 
+                            </tbody>
                         </table>
                     </div>
                     <div class="tab-pane" id="edit">
@@ -125,35 +139,35 @@
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Student ID</label>
                                 <div class="col-lg-9">
-                                    <p><b>Student ID</b></p>
-                                    <input type="hidden" name="student_id" value="00000099">
+                                    <p><b>{{grades[6]}}</b></p>
+                                    <input type="hidden" name="student_id" value="{{grades[6]}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">English</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" type="text" name="eng-class" value="Jane">
+                                    <input class="form-control" type="text" name="eng-class" value="{{grades[2]}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Math</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" name="math-class" type="text" value="Bishop">
+                                    <input class="form-control" name="math-class" type="text" value="{{grades[3]}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Social Studies</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" name="ss-class" type="text" value="email@gmail.com">
+                                    <input class="form-control" name="ss-class" type="text" value="{{grades[5]}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Science</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" name="sci-class" type="text" value="">
+                                    <input class="form-control" name="sci-class" type="text" value="{{grades[4]}}">
                                 </div>
                             </div>
-                           
+
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label"></label>
                                 <div class="col-lg-9">
@@ -167,7 +181,6 @@
             </div>
             <div class="col-lg-4 order-lg-1 text-center">
                 <img src="//placehold.it/150" class="mx-auto img-fluid img-circle d-block" alt="avatar">
-                <h6 class="mt-2">Upload a different photo</h6>
                 <label class="custom-file">
                     <input type="file" id="file" class="custom-file-input">
                     <span class="custom-file-control">Choose file</span>
@@ -175,8 +188,15 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>

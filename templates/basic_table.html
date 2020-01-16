@@ -58,6 +58,8 @@
         <tr>
           <th class="th-sm">Student's Name
           </th>
+          <th class="th-sm">Identification Number
+          </th>
           <th class="th-sm">Teacher
           </th>
           <th class="th-sm">English
@@ -74,7 +76,8 @@
         <!-- loop through and print out multiple tables -->
         {% for i in list %}
         <tr>
-          <td><a href="student/information?student_name={{i['student_name']}}">{{i['student_name']}}</a></td>
+          <td><a href="student/information?student_name={{i['student_name']}}&&student_id={{i['student_id']}}">{{i['student_name']}}</a></td>
+          <td>{{i['student_id']}}</td>
           <td>{{i['student_teacher']}}</td>
           <td>{{i['student_english']}}</td>
           <td>{{i['student_math']}}</td>
@@ -83,22 +86,6 @@
         </tr>
         {% endfor %}
       </tbody>
-      <tfoot>
-        <tr>
-          <th>Name
-          </th>
-          <th>Position
-          </th>
-          <th>Office
-          </th>
-          <th>Age
-          </th>
-          <th>Start date
-          </th>
-          <th>Salary
-          </th>
-        </tr>
-      </tfoot>
     </table>
   </div>
   <!-- /MAIN CONTENT -->

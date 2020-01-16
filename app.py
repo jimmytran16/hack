@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
+from flask import Flask, render_template, redirect, url_for, session, request, logging
 # sha256_crpyt for verifying encrypted passswords
 from passlib.hash import sha256_crypt
 # mysql db module
@@ -77,6 +77,7 @@ def students():
     query = 'SELECT * from student'
     cur.execute(query)
     data = cur.fetchall()
+    cur.close()
     student_list = []
     # populate the student_info dictionary with the student's information
     # store student_info into the student_list
@@ -92,7 +93,6 @@ def students():
         student_info['student_id'] = rows[6]
         student_list.append(student_info)
     # return to table template, and pass in list
-    cur.close()
     return render_template('basic_table.html', list=student_list)
 # student info page where their grades can be modified by teacher
 @app.route('/student/information',methods=['GET'])
@@ -101,8 +101,9 @@ def studentForm():
         return redirect(url_for('denied'))
     else:
         student_name = request.args.get('student_name')
-        print(student_name)
-        return render_template('studentinfo.html',student=student_name)
+        student_id = request.args.get('student_id')
+        student_data = getStudentInfo(student_id)
+        return render_template('studentinfo.html',student=student_name,grades=student_data[0])
 #ACTIONS------------------------------------------------------------------
 # upload form submissions
 @app.route('/upload',methods=['POST','GET'])
@@ -119,6 +120,7 @@ def upload():
     DATE_TO_STORE = date_today.strftime("%b-%d-%Y")
     cur.execute('INSERT INTO uploads(filename,upload,date,type) values(%s,%s,%s,%s)',(FILENAME,(BLOB,),DATE_TO_STORE,'1'))
     mysql.connection.commit()
+    cur.close()
     return redirect(url_for('forms'))
 
 @app.route('/student/update/grades',methods =['POST'])
@@ -151,8 +153,8 @@ def login():
     cur.execute(query)
     # fetch all of user data from the DB
     data = cur.fetchall()
-    print(data)
     cur.close()
+    print(data)
     err_msg = "The username or password you've entered doesn't match any account. Please try again!"
     # get user/pass from index form
     username = request.form['username']
@@ -185,6 +187,15 @@ def autho_login():
         return True
     else:
         return False
+
+# func to get specific student information, passing in id as reference
+def getStudentInfo(st_id):
+    cur = mysql.connection.cursor()
+    query = f'SELECT * from student where id_number ={st_id};'
+    cur.execute(query)
+    data = cur.fetchall()
+    cur.close()
+    return data
 
 #condition to run the app.py
 if __name__ == '__main__':
