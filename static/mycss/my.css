@@ -17,3 +17,8 @@
 .download_form{
     display: inline;
 }
+
+.submit-file-btn{
+    color: black!important;
+    background-color: #efefef!important;
+}

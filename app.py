@@ -7,7 +7,6 @@ from datetime import date
 
 # for encoding and decoding images
 import base64
-import io
 
 # init flask
 app = Flask(__name__)
@@ -16,64 +15,19 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'bhcc'
 app.config['MYSQL_DB'] = 'HHDB'
-
+#init a mysql object
 mysql = MySQL(app)
 
-
-@app.route('/login', methods=['POST'])
-def login():
-    # get cursor object for sql connection
-    cur = mysql.connection.cursor()
-    query = 'SELECT * FROM user;'
-    cur.execute(query)
-    # fetch all of user data from the DB
-    data = cur.fetchall()
-    print(data)
-    cur.close()
-    err_msg = "The username or password you've entered doesn't match any account. Please try again!"
-    # get user/pass from index form
-    username = request.form['username']
-    password = request.form['password']
-    # iterate through the rows
-    # check if username exist, if yes, verify the pass
-    # if fail then return to main, with error message
-    for row in data:
-        if row[2] == username:
-            if sha256_crypt.verify(password, row[3]):
-                full_name = row[0]+' '+row[1]
-                #save user's name in session
-                session['fullname'] = full_name
-                return render_template('dashboard.html', login=True, name=full_name)
-            else:
-                return render_template('index.html', error=True, message=err_msg)
-    return render_template('index.html', error=True, message=err_msg)
-
+# -----------------------------------
 # Mapping for URLS
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# upload form submissions
-@app.route('/upload',methods=['POST','GET'])
-def upload(): 
-    #init date object, get date, get filename
-    #convert the file to blob
-    #execute query to upload image into DB
-    #commit the execution
-    date_today = date.today()
-    file = request.files['filetoupload']
-    FILENAME = file.filename
-    BLOB = base64.b64encode(file.read())
-    cur = mysql.connection.cursor()
-    DATE_TO_STORE = date_today.strftime("%b-%d-%Y")
-    cur.execute('INSERT INTO uploads(filename,upload,date,type) values(%s,%s,%s,%s)',(FILENAME,(BLOB,),DATE_TO_STORE,'1'))
-    mysql.connection.commit()
-    return redirect(url_for('forms'))
-
 @app.route('/dashboard')
 def dashboard():
     if not autho_login():
-        return redirect('/')
+        return redirect(url_for("denied"))
     return render_template('dashboard.html', login= True, name = session['fullname'])
 
 # student behavoir chart
@@ -87,7 +41,7 @@ def general():
 @app.route('/forms')
 def forms():
     if not autho_login():
-        return redirect('/')
+        return redirect("accessDenied")
     cur = mysql.connection.cursor()
     query = 'SELECT * FROM uploads;'
     cur.execute(query)
@@ -95,7 +49,7 @@ def forms():
     cur.close()
     # check if there are any forms in the DB
     if data == None:
-        return render_template('forms_component.html')
+        return render_template('forms_component.html',template='form')
     # if not then iterate through the data by rows
     else:
         #get the BLOB data from rows
@@ -108,7 +62,7 @@ def forms():
             file_blob = row[1]
             imgdata = base64.b64decode(file_blob)
             with open(ext_to_save, 'wb') as f:
-                f.write(imgdata)
+                f.write(imgdata) 
             doc_list.append(filename)
         print(doc_list)
         return render_template('form_component.html',images = doc_list)
@@ -118,7 +72,7 @@ def forms():
 @app.route('/records')
 def students():
     if not autho_login():
-        return redirect('/')
+        return redirect('accessDenied')
     cur = mysql.connection.cursor()
     query = 'SELECT * from student'
     cur.execute(query)
@@ -140,16 +94,94 @@ def students():
     # return to table template, and pass in list
     cur.close()
     return render_template('basic_table.html', list=student_list)
+# student info page where their grades can be modified by teacher
+@app.route('/student/information',methods=['GET'])
+def studentForm():
+    if not autho_login():
+        return redirect(url_for('denied'))
+    else:
+        student_name = request.args.get('student_name')
+        print(student_name)
+        return render_template('studentinfo.html',student=student_name)
+#ACTIONS------------------------------------------------------------------
+# upload form submissions
+@app.route('/upload',methods=['POST','GET'])
+def upload(): 
+    #init date object, get date, get filename
+    #convert the file to blob
+    #execute query to upload image into DB
+    #commit the execution
+    date_today = date.today()
+    file = request.files['filetoupload']
+    FILENAME = file.filename
+    BLOB = base64.b64encode(file.read())
+    cur = mysql.connection.cursor()
+    DATE_TO_STORE = date_today.strftime("%b-%d-%Y")
+    cur.execute('INSERT INTO uploads(filename,upload,date,type) values(%s,%s,%s,%s)',(FILENAME,(BLOB,),DATE_TO_STORE,'1'))
+    mysql.connection.commit()
+    return redirect(url_for('forms'))
 
+@app.route('/student/update/grades',methods =['POST'])
+def updateGrade():
+#get data (grades,studentid,class) from webpage
+# #make query, execute  
+    cur = mysql.connection.cursor()
+    student_id = request.form.get('student_id')
+    math = request.form.get('math-class')
+    eng = request.form.get('eng-class')
+    ss = request.form.get('ss-class')
+    sci = request.form.get('sci-class')
+    student_class = request.form.get('class')
+    query = f'UPDATE student SET english={eng},math={math},science={sci},history={ss} WHERE id_number = {student_id}'
+    cur.execute(query)
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('students'))
+# AUTHORIZATIONS-------------------------------------------------------------------
+# function to block any type of unauthorized bypass and redirecting to log in page 
+@app.route('/accessDenied')
+def denied():
+    return render_template('index.html',error=True,message="Please log in!")
+    
+@app.route('/login', methods=['POST'])
+def login():
+    # get cursor object for sql connection
+    cur = mysql.connection.cursor()
+    query = 'SELECT * FROM user;'
+    cur.execute(query)
+    # fetch all of user data from the DB
+    data = cur.fetchall()
+    print(data)
+    cur.close()
+    err_msg = "The username or password you've entered doesn't match any account. Please try again!"
+    # get user/pass from index form
+    username = request.form['username']
+    password = request.form['password']
+    # iterate through the rows
+    # check if username exist, if yes, verify the pass
+    # if fail then return to main, with error message
+    for row in data:
+        if row[2] == username:      
+            if sha256_crypt.verify(password, row[3]):
+                full_name = row[0]+' '+row[1]
+                #save user's name in session
+                session['fullname'] = full_name
+                return redirect('dashboard')
+            else:
+                return render_template('index.html', error=True, message=err_msg)
+    return render_template('index.html', error=True, message=err_msg)
 
 @app.route('/logout')
 def logout():
     session['fullname'] = None
-    return render_template('index.html')
+    return redirect('/')
 
 # function to determine if user is logged in or not
 def autho_login():
-    if session['fullname']!=None:
+    #session variable 'fullname' is not assigned when user first runs the app
+    if not session.get('fullname'):
+        return False
+    elif session['fullname']!=None:
         return True
     else:
         return False
