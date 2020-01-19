@@ -4,7 +4,6 @@ from passlib.hash import sha256_crypt
 # mysql db module
 from flask_mysqldb import MySQL
 from datetime import date
-
 # for encoding and decoding images
 import base64
 
@@ -17,7 +16,6 @@ app.config['MYSQL_PASSWORD'] = 'bhcc'
 app.config['MYSQL_DB'] = 'HHDB'
 #init a mysql object
 mysql = MySQL(app)
-
 # -----------------------------------
 # Mapping for URLS
 @app.route('/')
@@ -37,7 +35,7 @@ def general():
         return redirect('/')
     return render_template('general.html')
 
-# student forms - incident / behavior
+# student forms - incident / disciplinary
 @app.route('/forms')
 def forms():
     if not autho_login():
@@ -49,7 +47,7 @@ def forms():
     cur.close()
     # check if there are any forms in the DB
     if data == None:
-        return render_template('forms_component.html',template='form')
+        return render_template('forms_component.html')
     # if not then iterate through the data by rows
     else:
         #get the BLOB data from rows
@@ -85,7 +83,7 @@ def students():
         student_info = {}
         print(rows)
         student_info['student_name'] = rows[0]
-        student_info['student_teacher'] = rows[1]
+        student_info['student_teacher'] = getTeacher(rows[1])
         student_info['student_english'] = rows[2]
         student_info['student_math'] = rows[3]
         student_info['student_science'] = rows[4]
@@ -102,8 +100,9 @@ def studentForm():
     else:
         student_name = request.args.get('student_name')
         student_id = request.args.get('student_id')
-        student_data = getStudentInfo(student_id)
-        return render_template('studentinfo.html',student=student_name,grades=student_data[0])
+        student_grades = getStudentGrades(student_id)
+        student_info = getStudentInfo(student_id)
+        return render_template('studentinfo.html',student=student_name,grades=student_grades,student_info=student_info)
 #ACTIONS------------------------------------------------------------------
 # upload form submissions
 @app.route('/upload',methods=['POST','GET'])
@@ -113,6 +112,7 @@ def upload():
     #execute query to upload image into DB
     #commit the execution
     date_today = date.today()
+    # updateActivityLog('2');
     file = request.files['filetoupload']
     FILENAME = file.filename
     BLOB = base64.b64encode(file.read())
@@ -123,10 +123,9 @@ def upload():
     cur.close()
     return redirect(url_for('forms'))
 
+#gets the data from form, and updates it into MySQL
 @app.route('/student/update/grades',methods =['POST'])
-def updateGrade():
-#get data (grades,studentid,class) from webpage
-# #make query, execute  
+def updateGrade(): 
     cur = mysql.connection.cursor()
     student_id = request.form.get('student_id')
     math = request.form.get('math-class')
@@ -139,8 +138,12 @@ def updateGrade():
     mysql.connection.commit()
     cur.close()
     return redirect(url_for('students'))
+@app.route('/docs/form',methods=['GET'])
+def renderDoc():
+    image_url = request.args.get('imageUrl')
+    return render_template('showdoc.html',image_url = image_url)
 # AUTHORIZATIONS-------------------------------------------------------------------
-# function to block any type of unauthorized bypass and redirecting to log in page 
+# block any type of unauthorized bypass and then redirecting to log in page 
 @app.route('/accessDenied')
 def denied():
     return render_template('index.html',error=True,message="Please log in!")
@@ -188,14 +191,40 @@ def autho_login():
     else:
         return False
 
-# func to get specific student information, passing in id as reference
-def getStudentInfo(st_id):
+# func to get specific student grades, passing in id as reference
+def getStudentGrades(st_id):
     cur = mysql.connection.cursor()
     query = f'SELECT * from student where id_number ={st_id};'
     cur.execute(query)
     data = cur.fetchall()
     cur.close()
-    return data
+    return data[0]
+# func to get student_info
+def getStudentInfo(st_id):
+    cur = mysql.connection.cursor()
+    query=f'SELECT * from student_info WHERE id_number ={st_id};'
+    cur.execute(query)
+    data = cur.fetchall()
+    return data[0]
+# func to get teacher's name using teacher id foreign key as reference
+def getTeacher(teacher_id):
+    cur = mysql.connection.cursor()
+    query = f'SELECT * from teacher where teacherID = {teacher_id};'
+    cur.execute(query)
+    data = cur.fetchall()
+    return data[0][0]
+# func to create a log of user's activity 
+# def updateActivityLog(type):
+#     cur = mysql.connection.cursor()
+#     current_day = date.today() 
+#     if type == '1':
+#         des = 'Grade has been updated'
+#     elif type =='2'
+#         des = 'A disciplinary/incident form has been submitted. Please take notice!'
+#     query = f"INSERT into log(teacher,activity_log,date,type) values('{}','{des}','{}','{type}');"
+#     cur.execute(query)
+#     mysql.connection.commit()
+#     cur.close()
 
 #condition to run the app.py
 if __name__ == '__main__':
