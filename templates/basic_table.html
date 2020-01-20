@@ -65,7 +65,9 @@
         <!-- loop through and print out multiple tables -->
         {% for i in list %}
         <tr>
-          <td><a href="student/information?student_name={{i['student_name']}}&&student_id={{i['student_id']}}">{{i['student_name']}}</a></td>
+          <td><a
+              href="student/information?student_name={{i['student_name']}}&student_id={{i['student_id']}}&autho_id={{i['student_teacher_id']}}">{{i['student_name']}}</a>
+          </td>
           <td>{{i['student_id']}}</td>
           <td>{{i['student_teacher']}}</td>
           <td>{{i['student_english']}}</td>

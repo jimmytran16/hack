@@ -224,7 +224,9 @@ ul.top-menu > li > .logout {
 	padding: 5px 15px;
 	margin-right: 15px;
 	background: #4ECDC4;
-	margin-top: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-weight: 500;
 }
 
 
@@ -1620,11 +1622,6 @@ PANELS CONFIGURATIONS
 
 .fontawesome-list i {
 	margin-right: 8px;
-}
-
-/* Grid Showcase*/
-
-	margin-bottom: 15px;
 }
 
 .show-grid [class^=col-] {

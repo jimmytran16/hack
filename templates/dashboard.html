@@ -43,18 +43,20 @@
       <div class="">
         <h1>Activity logs: </h1>
         <div class="activity-feed">
+          {% for data in activity_log %}
           <div class="feed-item">
-            <div class="date">Sep 25</div>
-            <div class="alert alert-success"><b>Warning!</b> Better check yourself, you're not looking too good.</div>
-          </div>
-          <div class="feed-item">
-            <div class="date">Sep 17</div>
-            <div class="alert alert-danger"><b>Warning!</b> dfdsfsdfdfdsfddsfdsfdsfdsfsdfdsfdsfdsffsdfsdfdsfdfsdfsdfdsfd.</div>
+            <div class="date">{{data[2]}}</div>
+            {% if data[3]=='1' %}
+            <div class="alert alert-success">
+              {% elif data[3] =='2' %}
+              <div class="alert alert-danger">
+                {% endif %}
+                {{data[1]}}</div>
+            </div>
+            {% endfor %}
           </div>
         </div>
-
-      </div>
-      <!-- /row -->
+        <!-- /row -->
     </section>
   </section>
   <!--main content end-->

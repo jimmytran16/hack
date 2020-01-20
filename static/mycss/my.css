@@ -112,3 +112,16 @@ table.table a {
   text-transform: uppercase;
   font-size: 30px;
 }
+
+/* studentinfo */
+.ml-auto, .mx-auto {
+  margin-left: 0!important;
+  padding-top: 30px;
+}
+
+.mr-auto, .mx-auto {
+  margin-right: 0!important;
+}
+.d-block {
+  display: block!important;
+}

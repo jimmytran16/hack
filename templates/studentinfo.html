@@ -8,7 +8,9 @@
     <title>Student's info</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/mycss/my.css') }}">
 </head>
+
 <body>
     <div class="container">
         <div class="row my-2">
@@ -27,6 +29,13 @@
                 <div class="tab-content py-4">
                     <div class="tab-pane active" id="profile">
                         <h2 class="mb-3">{{student}}</h2>
+                        <div class="col-lg-4 order-lg-1 text-center">
+                            <img src="//placehold.it/150" class="mx-auto img-fluid img-circle d-block" alt="avatar">
+                            <label class="custom-file">
+                                <input type="file" id="file" class="custom-file-input">
+                                <span class="custom-file-control">Choose file</span>
+                            </label>
+                        </div>
                     </div>
                     <div class="tab-pane" id="messages">
                         <table class="table table-hover table-striped">
@@ -48,7 +57,8 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span class="float-right font-weight-bold">{{student_info[4]}}</span>Parent Income:
+                                        <span class="float-right font-weight-bold">{{student_info[4]}}</span>Parent
+                                        Income:
                                     </td>
                                 </tr>
                                 <tr>
@@ -58,17 +68,20 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span class="float-right font-weight-bold">{{student_info[6]}}</span> Special Ed:
+                                        <span class="float-right font-weight-bold">{{student_info[6]}}</span> Special
+                                        Ed:
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span class="float-right font-weight-bold">{{student_info[7]}}</span> Reading Levels:
+                                        <span class="float-right font-weight-bold">{{student_info[7]}}</span> Reading
+                                        Levels:
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span class="float-right font-weight-bold">{{student_info[8]}}</span> Transportation:
+                                        <span class="float-right font-weight-bold">{{student_info[8]}}</span>
+                                        Transportation:
                                     </td>
                                 </tr>
                             </tbody>
@@ -76,6 +89,7 @@
                     </div>
                     <div class="tab-pane" id="edit">
                         <form method="POST" action="update/grades" role="form">
+                            <input type="hidden" name="teacher_id" value="{{teacher_id}}">
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Student ID</label>
                                 <div class="col-lg-9">
@@ -110,20 +124,15 @@
 
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label"></label>
+                                {% if session['id']==teacher_id %}
                                 <div class="col-lg-9">
                                     <input type="submit" class="btn btn-primary" value="Update Grades">
                                 </div>
+                                {% endif %}
                             </div>
                         </form>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 order-lg-1 text-center">
-                <img src="//placehold.it/150" class="mx-auto img-fluid img-circle d-block" alt="avatar">
-                <label class="custom-file">
-                    <input type="file" id="file" class="custom-file-input">
-                    <span class="custom-file-control">Choose file</span>
-                </label>
             </div>
         </div>
     </div>
