@@ -9,6 +9,9 @@ import base64
 
 # init flask
 app = Flask(__name__)
+#set secret key for session
+app.secret_key = '1232131G/21321312sw11'
+
 # set up MySQL crudentials
 app.config['MYSQL_HOST'] = 'wftuqljwesiffol6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'
 app.config['MYSQL_USER'] = 'ghgsii8c22l1c8lv'
@@ -272,5 +275,4 @@ def getActivityLogList():
 
 # condition to run the app.py
 if __name__ == '__main__':
-    app.secret_key = '1232131G/21321312sw11'
     app.run(debug=True)
