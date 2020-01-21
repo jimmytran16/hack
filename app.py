@@ -10,10 +10,10 @@ import base64
 # init flask
 app = Flask(__name__)
 # set up MySQL crudentials
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'bhcc'
-app.config['MYSQL_DB'] = 'HHDB'
+app.config['MYSQL_HOST'] = 'wftuqljwesiffol6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'
+app.config['MYSQL_USER'] = 'ghgsii8c22l1c8lv'
+app.config['MYSQL_PASSWORD'] = 'pd1bp88tw2japxpn'
+app.config['MYSQL_DB'] = 'wgrehtsdcu9l1f5z'
 # init a mysql object
 mysql = MySQL(app)
 # -----------------------------------
