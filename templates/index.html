@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>HPS</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -18,15 +17,11 @@
 <!-- Full Page Image Header with Vertically Centered Content -->
 
 <body>
-
   <nav class="navbar-fixed-top navbar navbar-expand-lg navbar-light bg-light ">
     <img width="" height="40px" src="{{ url_for('static',filename='img/haverhillogo.jpeg') }}" alt="">
-    <a class="navbar-brand" href="#">Haverhill Public Schools</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <a class="navbar-brand" href="#">HPS</a>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="navbar-collapse" id="">
       <ul class="navbar-nav mr-auto">
       </ul>
       <!-- Will return the validateform() function as true or false depending on login -->
@@ -36,10 +31,11 @@
         <span class="errormsg_span" style="color:red">{{ message }}</span>
         {% endif %}
         {% endblock content %}
+        <div class="nav-item">
         <input class="form-control mr-sm-2" type="text" name="username" placeholder="Username">
         <input type="password" name="password" class="form-control mr-sm-2" placeholder="Password">
-
         <button class="btn btn-secondary" type="submit">Log in</button>
+        </div>
       </form>
     </div>
   </nav>
@@ -47,7 +43,7 @@
     <div class="container h-100">
       <div class="row h-100 align-items-center">
         <div class="col-12 text-center">
-          <h1 class="font-weight-light"><b>Welcome To Haverhill Public Schools</b></h1>
+          <h1 class="font-weight-light"><b>Welcome To HPS</b></h1>
           <p class="lead">A caring educational partnership of school, family and community</p>
         </div>
       </div>
