@@ -9,7 +9,6 @@ import base64
 
 # init flask
 app = Flask(__name__)
-#set secret key for session
 app.secret_key = '1232131G/21321312sw11'
 
 # set up MySQL crudentials
@@ -39,7 +38,24 @@ def dashboard():
 def general():
     if not autho_login():
         return redirect('/')
-    return render_template('general.html')
+    return render_template('general.html',searched = False)
+# get student information for the graph
+@app.route('/fetchGrades')
+def fetchgrades():
+    if not autho_login():
+        return redirect('/')
+    else:
+        student_id = request.args.get('student_id')
+        row = getStudentGrades(student_id)
+        print(row)
+        info_hash = {
+            "Name":row[0],
+            "English":[row[2],checkGradeType(row[2])],
+            "Math":[row[3],checkGradeType(row[3])],
+            "Science":[row[4],checkGradeType(row[4])],
+            "History": [row[5],checkGradeType(row[5])]
+            }
+        return render_template('general.html', info_hash = info_hash, searched = True)
 
 # student forms - incident / disciplinary
 @app.route('/forms')
@@ -221,8 +237,6 @@ def getStudentGrades(st_id):
     cur.close()
     return data[0]
 # func to get student_info
-
-
 def getStudentInfo(st_id):
     cur = mysql.connection.cursor()
     query = f'SELECT * from student_info WHERE id_number ={st_id};'
@@ -230,8 +244,6 @@ def getStudentInfo(st_id):
     data = cur.fetchall()
     return data[0]
 # func to get specfic student's full name
-
-
 def getStudentName(st_id):
     cur = mysql.connection.cursor()
     query = f'SELECT * from student where id_number = {st_id};'
@@ -239,8 +251,6 @@ def getStudentName(st_id):
     data = cur.fetchall()
     return data[0][0]
 # func to get teacher's name using teacher id foreign key as reference
-
-
 def getTeacher(teacher_id):
     cur = mysql.connection.cursor()
     query = f'SELECT * from staff where staffID = {teacher_id};'
@@ -248,8 +258,6 @@ def getTeacher(teacher_id):
     data = cur.fetchall()
     return data[0][0]
 # func to create a log of user's activity
-
-
 def updateActivityLog(type, student):
     cur = mysql.connection.cursor()
     current_day = date.today()
@@ -262,8 +270,6 @@ def updateActivityLog(type, student):
     mysql.connection.commit()
     cur.close()
 # func to return a list of the activity logdesc
-
-
 def getActivityLogList():
     cur = mysql.connection.cursor()
     query = 'SELECT * from log'
@@ -271,7 +277,17 @@ def getActivityLogList():
     data = cur.fetchall()
     cur.close()
     return data
-
+def checkGradeType(grade):
+    print(grade)
+    if float(grade) < 60.0:
+        return 'danger'
+    elif float(grade) > 80.0:
+        return 'success'
+    elif float(grade) < 70.0 and float(grade) > 60.0:
+        return 'warning'
+    elif float(grade) <80.0 and float(grade) > 70.0:
+        return 'info'
+    
 
 # condition to run the app.py
 if __name__ == '__main__':
