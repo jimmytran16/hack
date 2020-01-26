@@ -33,3 +33,15 @@ bottom: .5em;
     background-position: center;
     background-repeat: no-repeat;
   }
+/* navvbar sign in --> adjust to the right */
+  @media (min-width: 992px){
+    .navbar-expand-lg .navbar-collapse {
+        display: -ms-flexbox!important;
+        display: flex!important;
+        -ms-flex-preferred-size: auto;
+        flex-basis: auto;
+        position: absolute;
+        right: 0;
+        padding-right: 20px;
+    }
+  }

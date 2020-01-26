@@ -441,6 +441,7 @@ a.logo {
 
 a.logo b {
     font-weight: 900;
+    padding-left:20px;
 }
 
 a.logo:hover, a.logo:focus {

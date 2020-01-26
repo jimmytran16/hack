@@ -189,7 +189,7 @@ def login():
     data = cur.fetchall()
     cur.close()
     print(data)
-    err_msg = "The username or password you've entered doesn't match any account. Please try again!"
+    err_msg = "Invalid username or password!"
     # get user/pass from index form
     username = request.form['username']
     password = request.form['password']
