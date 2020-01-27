@@ -30,10 +30,10 @@ def dashboard():
     if not autho_login():
         return redirect(url_for("denied"))
     activity_log = getActivityLogList()  # get activity log from db
-	list = []
-	for i in activity_log:
-		list.append(i)
-	list.reverse()
+    list = []
+    for i in activity_log:
+        list.append(i)
+    list.reverse()
     print(activity_log)
     return render_template('dashboard.html', login=True, name=session['fullname'], activity_log=list)
 
