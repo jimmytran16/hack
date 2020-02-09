@@ -41,6 +41,13 @@ table.table a {
   font-size: 18px;
 }
 
+.container_table {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 /* showdoc */
 /* display the image in the center screen */
 .center

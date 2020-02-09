@@ -23,8 +23,7 @@ mysql = MySQL(app)
 @app.route('/')
 def index():
     return render_template('index.html')
-
-
+    
 @app.route('/dashboard')
 def dashboard():
     if not autho_login():
@@ -51,6 +50,7 @@ def fetchgrades():
     else:
         student_id = request.args.get('student_id')
         row = getStudentGrades(student_id)
+        # priority_list = getStudentHours(student_id)3
         print(row)
         info_hash = {
             "Name":row[0],
@@ -219,8 +219,6 @@ def logout():
     return redirect('/')
 
 # function to determine if there is a user logged in
-
-
 def autho_login():
     # session variable 'fullname' is not assigned when user first runs the app
     if not session.get('fullname'):
@@ -231,8 +229,6 @@ def autho_login():
         return False
 
 # func to get a specific student's grades, passing in id as reference
-
-
 def getStudentGrades(st_id):
     cur = mysql.connection.cursor()
     query = f'SELECT * from student where id_number ={st_id};'
@@ -281,6 +277,8 @@ def getActivityLogList():
     data = cur.fetchall()
     cur.close()
     return data
+
+#func to check to compare the grade of the student and then return the right bootstrap class for color of the bar graph
 def checkGradeType(grade):
     print(grade)
     if float(grade) < 60.0:
@@ -291,8 +289,14 @@ def checkGradeType(grade):
         return 'warning'
     elif float(grade) <80.0 and float(grade) > 70.0:
         return 'info'
+#func to get the 
+# def getStudentHours(std_id):
+#     cur = mysql.connection.cursor()
+#     query = 'SELECT * from student'
+#     cur.execute(query)
+#     data = cur.fetchall()
+#     cur.close()
     
-
 # condition to run the app.py
 if __name__ == '__main__':
     app.run(debug=True)
