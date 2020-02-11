@@ -3,6 +3,8 @@
 
 <head>
   <!--external css-->
+  <link rel="stylesheet" type="text/css"
+    href="http://www.prepbootstrap.com/Content/shieldui-lite/dist/css/light/all.min.css" />
   <link rel="stylesheet" href="{{ url_for('static',filename='css/prioritytable.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -19,31 +21,10 @@
       color: aliceblue;
       font-size: 18px;
     }
-
     .nav>li>a {
       position: relative;
       display: block;
       padding: 10px 15px;
-    }
-
-    .persp1 {
-      height: 90%;
-    }
-
-    .persp2 {
-      height: 90%;
-    }
-
-    .persp3 {
-      height: 90%;
-    }
-
-    .persp4 {
-      height: 90%;
-    }
-
-    .persp5 {
-      height: 17%;
     }
   </style>
   <title>HPS</title>
@@ -59,13 +40,11 @@
     </div>
     <div class="top-menu">
       <ul class="nav pull-right top-menu">
-        {% block content %}
         {% if session['fullname']!=None %}
         <li>
           <p class="welcome_message_name">Welcome, {{session['fullname']}}</p>
         </li>
         {% endif %}
-        {% endblock content %}
         <li><a class="logout" href="logout">Logout</a></li>
       </ul>
     </div>
@@ -113,9 +92,12 @@
           <div class="col-lg-6 col-md-6 col-sm-12">
             <!--  BASIC PROGRESS BARS -->
             <div class="showback">
-              <h1>Student Progress Graphs</h1>
+              <h1>Student Progress</h1>
               <form action="fetchGrades" method="GET">
                 <div class="active-cyan-3 active-cyan-4 mb-4">
+                  {% if error %}
+                  <span style="color: red;">{{error}}</span>
+                  {% endif %}
                   <input class="form-control" name="student_id" value="" type="text"
                     placeholder="Search For student with ID" aria-label="Search">
                 </div>
@@ -126,76 +108,78 @@
             <!-- /showback -->
             <!--  GRITTER NOTICES -->
             {% if searched %}
-            <div class="showback">
-              <h2>{{info_hash['Name']}}</h2>
-              <div class="progress">
-                <div class="progress-bar progress-bar-{{info_hash['English'][1]}}" role="progressbar" aria-valuenow="40"
-                  aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                  {{info_hash['English'][0]}}% ENGLISH
-                </div>
-              </div>
-              <div class="progress">
-                <div class="progress-bar progress-bar-{{info_hash['Science'][1]}}" role="progressbar" aria-valuenow="50"
-                  aria-valuemin="0" aria-valuemax="100" style="width:50%">
-                  {{info_hash['Science'][0]}}% SCIENCE
-                </div>
-              </div>
-              <div class="progress">
-                <div class="progress-bar progress-bar-{{info_hash['Math'][1]}}" role="progressbar" aria-valuenow="60"
-                  aria-valuemin="0" aria-valuemax="100" style="width:60%">
-                  {{info_hash['Math'][0]}}% MATH
-                </div>
-              </div>
-              <div class="progress">
-                <div class="progress-bar progress-bar-{{info_hash['History'][1]}}" role="progressbar" aria-valuenow="70"
-                  aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                  {{info_hash['History'][0]}}% HISTORY
-                </div>
-              </div>
-            </div>
-            <div class="full">
-              <h1 class="">
-                Student Hour Prriority
-              </h1>
-              <div class="container">
-                <div class="bars">
-                  <div class="persp5">
-                    <figure class="face front"></figure>
-                    <div class="face data-y">11.7</div>
-                  </div>
-                  <div class="persp4">
-                    <figure class="face front"></figure>
-                    <div class="face data-y">150</div>
-                  </div>
-                  <div class="persp3">
-                    <figure class="face front"></figure>
-                    <div class="face data-y">170</div>
-                  </div>
-
-                  <div class="persp2">
-                    <figure class="face front"></figure>
-                    <div class="face data-y">555</div>
-                  </div>
-
-                  <div class="persp1">
-                    <figure class="face front"></figure>
-                    <div class="face data-y">901</div>
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3>Student's Grade </h3>
+                    </div>
+                    <div class="panel-body">
+                      <div class="showback">
+                        <h2>{{info_hash['Name']}}</h2>
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-{{info_hash['English'][1]}}" role="progressbar"
+                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
+                            {{info_hash['English'][0]}}% ENGLISH
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-{{info_hash['Science'][1]}}" role="progressbar"
+                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                            {{info_hash['Science'][0]}}% SCIENCE
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-{{info_hash['Math'][1]}}" role="progressbar"
+                            aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:60%">
+                            {{info_hash['Math'][0]}}% MATH
+                          </div>
+                        </div>
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-{{info_hash['History'][1]}}" role="progressbar"
+                            aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:90%">
+                            {{info_hash['History'][0]}}% HISTORY
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                <div class="base"></div>
+                <div class="col-md-6">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3>Daily Requirement Study Hours</h3>
+                    </div>
+                    <div class="panel-body">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Teacher</th>
+                            <th>English</th>
+                            <th>Math</th>
+                            <th>Science</th>
+                            <th>History</th>
+                            <th>Free Time</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{{hour_list[5]}}</td>
+                            <td>{{hour_list[6]}}</td>
+                            <td>{{hour_list[0]}} minutes</td>
+                            <td>{{hour_list[1]}} minutes</td>
+                            <td>{{hour_list[2]}} minutes</td>
+                            <td>{{hour_list[3]}} minutes</td>
+                            <td>{{hour_list[4]}} minutes</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="subtitle">
-                <ul class="list-social">
-                  <li class="fb">Math</li>
-                  <li class="twt">English</li>
-                  <li class="gp">Science</li>
-                  <li class="lkd">Social Studies</li>
-                  <li class="pin">Free Time</li>
-                </ul>
-              </div>
-
-              <!-- /showback -->
             </div>
             {% endif %}
             <!-- /showback -->
@@ -218,6 +202,11 @@
     </footer>
     <!--footer end-->
   </section>
+  <link rel="stylesheet" type="text/css"
+    href="http://www.prepbootstrap.com/Content/shieldui-lite/dist/css/light/all.min.css" />
+  <script type="text/javascript"
+    src="http://www.prepbootstrap.com/Content/shieldui-lite/dist/js/shieldui-lite-all.min.js"></script>
+
   <!-- js placed at the end of the document so the pages load faster -->
   <script src="{{ url_for('static',filename='lib/jquery/jquery.min.js') }}"></script>
 
