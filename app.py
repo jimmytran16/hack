@@ -6,6 +6,7 @@ from flask_mysqldb import MySQL
 from datetime import date
 # for encoding and decoding images
 import base64
+from student_pkg.Student import Student
 
 # init flask
 app = Flask(__name__)
@@ -52,15 +53,16 @@ def fetchgrades():
         row = getStudentGrades(student_id)
         if row == None:
             return render_template('general.html', error = 'Student does not exist!')
-        # will pass in the student data to the getHours() function to determine study hour requirements
-        priority_list = getStudentHours(row)
+        # will pass in the student data and teacher to the getHours() function to determine study hour requirements
+        st_teacher = getTeacher(row[1])
+        priority_list = Student.getStudentHours(row,st_teacher)
         print(row)
         info_hash = {
             "Name":row[0],
-            "English":[row[2],checkGradeType(row[2])],
-            "Math":[row[3],checkGradeType(row[3])],
-            "Science":[row[4],checkGradeType(row[4])],
-            "History": [row[5],checkGradeType(row[5])]
+            "English":[row[2],Student.checkGradeType(row[2])],
+            "Math":[row[3],Student.checkGradeType(row[3])],
+            "Science":[row[4],Student.checkGradeType(row[4])],
+            "History": [row[5],Student.checkGradeType(row[5])]
             }
         return render_template('general.html', info_hash = info_hash, hour_list = priority_list, searched = True)
 
@@ -197,7 +199,7 @@ def login():
     cur.close()
     print(data)
     err_msg = "Invalid username or password!"
-    # get user/pass from index form
+    # get user and password from the web page form
     username = request.form['username']
     password = request.form['password']
     # iterate through the rows
@@ -282,52 +284,7 @@ def getActivityLogList():
     data = cur.fetchall()
     cur.close()
     return data
-#func to check if student exists in the database
-# def checkIfStudentExists(st_id):
-#     cursor = mysqlconnection.cursor()
-#     cursor.execute('SELECT * from student WHERE ')
 
-#func to check to compare the grade of the student and then return the right bootstrap class for color of the bar graph
-def checkGradeType(grade):
-    print(grade)
-    if float(grade) < 60.0:
-        return 'danger'
-    elif float(grade) > 80.0:
-        return 'success'
-    elif float(grade) < 70.0 and float(grade) > 60.0:
-        return 'warning'
-    elif float(grade) <80.0 and float(grade) > 70.0:
-        return 'info'
-#func to get the student hour requirements based on their grades and store into a list
-def getStudentHours(student_data):
-    list = []
-    list.append(checkHours(student_data[2])) #english
-    list.append(checkHours(student_data[3])) #math
-    list.append(checkHours(student_data[4])) #science
-    list.append(checkHours(student_data[5])) #history
-    list.append(freeTime(list)) # free time
-    list.append(student_data[0]) # name
-    list.append(getTeacher(student_data[1])) #teacher
-    return list
-
-# func passing in grade and determining the hours needed to study in a day
-# # returns a list of [hour]
-def checkHours(grade):
-    if float(grade) >= 90:
-        return 0
-    elif float(grade) > 80 and float(grade) < 90:
-        return 30
-    elif float(grade) >= 70 and float(grade) <=80:
-        return 45
-    elif float(grade) < 70 :
-        return 60
-    return
-#func for free time
-def freeTime(hour_list):
-    total_free = 360
-    for i in hour_list:
-        total_free = total_free - float(i)
-    return total_free
 
 # condition to run the app.py
 if __name__ == '__main__':
