@@ -6,17 +6,28 @@ from flask_mysqldb import MySQL
 from datetime import date
 # for encoding and decoding images
 import base64
-from student_pkg.Student import Student
+# import config
+from student_pkg import Student
+import os
 
 # init flask
 app = Flask(__name__)
-app.secret_key = '1232131G/21321312sw11'
+
+app.secret_key = os.environ.get('SEC_KEY')
 
 # set up MySQL crudentials
-app.config['MYSQL_HOST'] = 'wftuqljwesiffol6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'
-app.config['MYSQL_USER'] = 'ghgsii8c22l1c8lv'
-app.config['MYSQL_PASSWORD'] = 'pd1bp88tw2japxpn'
-app.config['MYSQL_DB'] = 'wgrehtsdcu9l1f5z'
+# LOCAL DATABASE CONFIGS
+# app.config['MYSQL_HOST'] = config.HOST_NAME
+# app.config['MYSQL_USER'] = config.DB_USER
+# app.config['MYSQL_PASSWORD'] = config.DB_PASS
+# app.config['MYSQL_DB'] = config.DB_NAME
+
+# HEROKU DATABASE CONFIGS -- get the enviroment variables from the heroku server
+app.config['MYSQL_HOST'] = os.environ.get('HOST_NAME')
+app.config['MYSQL_USER'] = os.environ.get('DB_USER')
+app.config['MYSQL_PASSWORD'] = os.environ.get('DB_PASS')
+app.config['MYSQL_DB'] = os.environ.get('DB_NAME')
+
 # init a mysql object
 mysql = MySQL(app)
 # -----------------------------------
