@@ -6,21 +6,22 @@ from flask_mysqldb import MySQL
 from datetime import date
 # for encoding and decoding images
 import base64
-# import config
 from student_pkg import Student
 import os
 
+# import config #comment OUT when deploying ----------------------------------------------------------------------------------!!
+from db import calls
 # init flask
 app = Flask(__name__)
-
+# app.secret_key = config.SEC_KEY
 app.secret_key = os.environ.get('SEC_KEY')
 
 # set up MySQL crudentials
 # LOCAL DATABASE CONFIGS
-# app.config['MYSQL_HOST'] = config.HOST_NAME
-# app.config['MYSQL_USER'] = config.DB_USER
-# app.config['MYSQL_PASSWORD'] = config.DB_PASS
-# app.config['MYSQL_DB'] = config.DB_NAME
+# app.config['MYSQL_HOST'] = config.R_HOST_NAME
+# app.config['MYSQL_USER'] = config.R_DB_USER
+# app.config['MYSQL_PASSWORD'] = config.R_DB_PASS
+# app.config['MYSQL_DB'] = config.R_DB_NAME
 
 # HEROKU DATABASE CONFIGS -- get the enviroment variables from the heroku server
 app.config['MYSQL_HOST'] = os.environ.get('HOST_NAME')
@@ -35,17 +36,16 @@ mysql = MySQL(app)
 @app.route('/')
 def index():
     return render_template('index.html')
-    
+
 @app.route('/dashboard')
 def dashboard():
     if not autho_login():
         return redirect(url_for("denied"))
-    activity_log = getActivityLogList()  # get activity log from db
+    activity_log = calls.getActivityLogList()  # get activity log from db
     list = []
     for i in activity_log:
         list.append(i)
     list.reverse()
-    print(activity_log)
     return render_template('dashboard.html', login=True, name=session['fullname'], activity_log=list)
 
 # student behavoir chart
@@ -61,13 +61,12 @@ def fetchgrades():
         return redirect('/')
     else:
         student_id = request.args.get('student_id')
-        row = getStudentGrades(student_id)
+        row = calls.getStudentGrades(student_id)
         if row == None:
             return render_template('general.html', error = 'Student does not exist!')
         # will pass in the student data and teacher to the getHours() function to determine study hour requirements
-        st_teacher = getTeacher(row[1])
+        st_teacher = calls.getTeacher(row[1])
         priority_list = Student.getStudentHours(row,st_teacher)
-        print(row)
         info_hash = {
             "Name":row[0],
             "English":[row[2],Student.checkGradeType(row[2])],
@@ -104,7 +103,6 @@ def forms():
             with open(ext_to_save, 'wb') as f:
                 f.write(imgdata)
             doc_list.append(filename)
-        print(doc_list)
         return render_template('form_component.html', images=doc_list)
     return render_template('form_component.html')
 
@@ -126,7 +124,7 @@ def students():
         print(rows)
         student_info['student_teacher_id'] = rows[1]
         student_info['student_name'] = rows[0]
-        student_info['student_teacher'] = getTeacher(rows[1])
+        student_info['student_teacher'] = calls.getTeacher(rows[1])
         student_info['student_english'] = rows[2]
         student_info['student_math'] = rows[3]
         student_info['student_science'] = rows[4]
@@ -144,8 +142,8 @@ def studentForm():
         student_name = request.args.get('student_name')
         teacher_id = request.args.get('autho_id')
         student_id = request.args.get('student_id')
-        student_grades = getStudentGrades(student_id)
-        student_info = getStudentInfo(student_id)
+        student_grades = calls.getStudentGrades(student_id)
+        student_info = calls.getStudentInfo(student_id)
         return render_template('studentinfo.html', student=student_name, grades=student_grades, student_info=student_info, teacher_id=teacher_id)
 # ACTIONS------------------------------------------------------------------
 # upload form submissions
@@ -157,7 +155,7 @@ def upload():
     # commit the execution
 
     # update activity log
-    updateActivityLog('2', 'blank')
+    calls.updateActivityLog('2', 'blank')
     date_today = date.today()
     file = request.files['filetoupload']
     FILENAME = file.filename
@@ -180,8 +178,8 @@ def updateGrade():
     ss = request.form.get('ss-class')
     sci = request.form.get('sci-class')
     student_class = request.form.get('class')
-    student_fullname = getStudentName(student_id)
-    updateActivityLog('1', student_fullname)
+    student_fullname = calls.getStudentName(student_id)
+    calls.updateActivityLog('1', student_fullname)
     query = f'UPDATE student SET english={eng},math={math},science={sci},history={ss} WHERE id_number = {student_id}'
     cur.execute(query)
     mysql.connection.commit()
@@ -243,59 +241,6 @@ def autho_login():
         return True
     else:
         return False
-
-# func to get a specific student's grades, passing in id as reference
-def getStudentGrades(st_id):
-    cur = mysql.connection.cursor()
-    query = f'SELECT * from student where id_number ={st_id};'
-    cur.execute(query)
-    data = cur.fetchall()
-    cur.close()
-    if not data: # if the data is empty (meaning that the student doesn't exist, then return None)
-        return None
-    return data[0]
-# func to get student_info
-def getStudentInfo(st_id):
-    cur = mysql.connection.cursor()
-    query = f'SELECT * from student_info WHERE id_number ={st_id};'
-    cur.execute(query)
-    data = cur.fetchall()
-    return data[0]
-# func to get specfic student's full name
-def getStudentName(st_id):
-    cur = mysql.connection.cursor()
-    query = f'SELECT * from student where id_number = {st_id};'
-    cur.execute(query)
-    data = cur.fetchall()
-    return data[0][0]
-# func to get teacher's name using teacher id foreign key as reference
-def getTeacher(teacher_id):
-    cur = mysql.connection.cursor()
-    query = f'SELECT * from staff where staffID = {teacher_id};'
-    cur.execute(query)
-    data = cur.fetchall()
-    return data[0][0]
-# func to create a log of user's activity
-def updateActivityLog(type, student):
-    cur = mysql.connection.cursor()
-    current_day = date.today()
-    if type == '1':
-        des = f'Grade has been updated for {student}'
-    elif type == '2':
-        des = f'A disciplinary/incident form has been submitted. Please take notice! by-{session["fullname"]}'
-    query = f"INSERT into log(teacher,activity_description,date,type) values('{session['id']}','{des}','{current_day}','{type}');"
-    cur.execute(query)
-    mysql.connection.commit()
-    cur.close()
-# func to return a list of the activity logdesc
-def getActivityLogList():
-    cur = mysql.connection.cursor()
-    query = 'SELECT * from log'
-    cur.execute(query)
-    data = cur.fetchall()
-    cur.close()
-    return data
-
 
 # condition to run the app.py
 if __name__ == '__main__':
