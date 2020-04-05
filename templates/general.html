@@ -9,8 +9,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-  <link href="{{ url_for('static', filename='backupcs/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ url_for('static', filename='backupcs/addons/datatables.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='mycss/my.css') }}" rel="stylesheet">
   <style>
     .welcome_message_name {
@@ -98,8 +96,8 @@
                   {% if error %}
                   <span style="color: red;">{{error}}</span>
                   {% endif %}
-                  <input class="form-control" name="student_id" value="" type="text"
-                    placeholder="Search For student with ID" aria-label="Search">
+                  <input class="form-control" name="student_id" value="" type="number"
+                     placeholder="Search For student with ID" aria-label="Search">
                 </div>
                 <button class="btn btn-primary">LOAD</button>
               </form>
@@ -206,20 +204,10 @@
     href="http://www.prepbootstrap.com/Content/shieldui-lite/dist/css/light/all.min.css" />
   <script type="text/javascript"
     src="http://www.prepbootstrap.com/Content/shieldui-lite/dist/js/shieldui-lite-all.min.js"></script>
-
   <!-- js placed at the end of the document so the pages load faster -->
   <script src="{{ url_for('static',filename='lib/jquery/jquery.min.js') }}"></script>
-
-  <script src="{{ url_for('static',filename='lib/jquery/jquery.min.js') }}lib/bootstrap/js/bootstrap.min.js"></script>
-  <script class="include" type="text/javascript"
-    src="{{ url_for('static',filename='lib/jquery.dcjqaccordion.2.7.js') }}"></script>
-  <script src="{{ url_for('static',filename='lib/jquery.scrollTo.min.js') }}"></script>
-  <script src="{{ url_for('static',filename='lib/jquery.nicescroll.js') }}" type="text/javascript"></script>
-  <!--common script for all pages-->
-  <script src="{{ url_for('static',filename='lib/common-scripts.js') }}"></script>
   <!--script for this page-->
   <script type="text/javascript" src="{{ url_for('static',filename='lib/jquery/jquery.min.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static',filename='lib/gritter-conf.js') }}"></script>
 </body>
 
 </html>
