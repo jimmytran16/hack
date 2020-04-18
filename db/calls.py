@@ -11,7 +11,6 @@ def getAdminUser(user_name):
     except IndexError:
         return 'error'
     return data
-
 def getStudentDataRequest(id):
     cur = app.mysql.connection.cursor()
     query = f'SELECT * from student where id_number = {id};'
@@ -25,6 +24,35 @@ def getTeacherDataRequest(id):
     cur.execute(query)
     data = cur.fetchall()
     return data
+#func to get all teachers
+def getAllTeachers():
+    cur = app.mysql.connection.cursor()
+    cur.execute("SELECT * from staff;")
+    data = cur.fetchall()
+    cur.close()
+    return data
+def getAllStudents(): #func to get all students
+    cur = app.mysql.connection.cursor()
+    cur.execute("SELECT * from student;")
+    data = cur.fetchall()
+    cur.close()
+    return data
+def getApiKey(key): # get the api key from the database that is passed in by the user
+    cur = app.mysql.connection.cursor()
+    cur.execute(f"SELECT * from api_user where api_key = '{key}';")
+    data = cur.fetchall()
+    cur.close()
+    if data: # if db returns data then return true, if not (no api key by the given was found) return false
+        return True
+    else:
+        return False
+def saveApiKey(username,key):
+    cur = app.mysql.connection.cursor()
+    cur.execute(f"INSERT into api_user(username,api_key) VALUES('{username}','{key}');")
+    app.mysql.connection.commit()
+    cur.close()
+
+# API END -----------------------------------------
 # get user data from the DATABASE
 def getUserData():
     # get cursor object for sql connection
@@ -36,7 +64,7 @@ def getUserData():
     cur.close()
     return data
 
-def submitStudentGrade(eng,math,sci,ss,student_id):
+def submitStudentGrade(eng,math,sci,ss,student_id): #update the student's grade
     cur = app.mysql.connection.cursor()
     query = f'UPDATE student SET english={eng},math={math},science={sci},history={ss} WHERE id_number = {student_id}'
     cur.execute(query)

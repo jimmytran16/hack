@@ -1,0 +1,52 @@
+{% extends 'api/layout.html' %}
+{% block head %}
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Sign Up</title>
+  <style media="screen">
+    .form-control {
+      width: 50%;
+      margin: 0 auto;
+    }
+    .form-group{
+      text-align: center!important;
+    }
+    form{
+      margin: 0 auto!important;
+    }
+    .button_container{
+      text-align: center;
+    }
+    .container{
+      padding-top: 10%;
+    }
+    .prompt_container{
+      text-align: center;
+      padding-bottom: 20px;
+    }
+    .btn-primary {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+  }
+  </style>
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <div class="prompt_container">
+      <h2>Sign Up For API Key</h2>
+    </div>
+    <form action="{{url_for('generateKey')}}" method="POST">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input name="emailAddress" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+      </div>
+      <div class="form-group form-check">
+      </div>
+      <div class="button_container"><button  type="submit" class="btn btn-primary">Submit</button></div>
+      {% if signup %}
+      <span style="color:blue">Successfully signed up! API KEY: {{KEY}} </span>
+      {% endif %}
+    </form>
+  </div>
+  {% endblock %}

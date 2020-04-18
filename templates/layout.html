@@ -3,24 +3,26 @@
 <head>
     <!--external css-->
     <link rel="stylesheet" href="{{ url_for('static',filename='css/prioritytable.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    <link href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='mycss/my.css') }}" rel="stylesheet">
-   <style>.welcome_message_name {
+    <style>
+    .welcome_message_name {
         margin-top: 0 !important;
         margin-bottom: 1rem !important;
         margin-top: 1.5rem !important;
         padding-right: 20px !important;
         color: aliceblue;
         font-size: 18px;
-    }
-    .nav>li>a {
-    position: relative;
-    display: block;
-    padding: 10px 15px;
-    }
+     }
+     .nav>li>a {
+       position: relative;
+       display: block;
+       padding: 10px 15px;
+     }
     </style>
-<title>HPS</title>
+    <title>{% block title%}{% endblock %}</title>
 </head>
 <body>
     <!--header start-->

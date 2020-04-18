@@ -6,6 +6,8 @@ import base64 # for encoding and decoding images
 from flask import render_template, redirect, url_for, session, request, logging, jsonify
 # sha256_crpyt for verifying encrypted passswords
 from passlib.hash import sha256_crypt
+from uuid import uuid4 #generating API keys
+
 # Mapping for URLS
 @app.route('/')
 def index():
@@ -182,23 +184,35 @@ def logout():
     session['id'] = None
     return redirect('/')
 
-@app.route('/adminLogout')
+@app.route('/adminLogout',methods=['POST'])
 def adminLogout():
-    session['admin'] = None
-    return redirect('api')
+    if request.method == 'POST':
+        session['admin'] = None #Empty the admin value in session
+        return redirect('api')
+    else:
+        return 'Method not allowed! 405'
+
+@app.route('/api/admin') #route to admin log in page
+def adminSignIn():
+    if autho_login_admin():
+        return redirect('successLogin')
+    else:
+        return render_template('api/admin.html')
 
 @app.route('/api') #render the admin page to login for API access
 def APIpage():
-    if autho_login_admin():
-        return redirect('successLogin')
-    return render_template('api/admin.html')
+    return render_template('api/home.html')
+
 @app.route('/unauthorized403')
 def unauthorized():
     return render_template('api/403error.html')
 
 @app.route('/successLogin')
 def AdminSucces():
-    return render_template('api/admin_dashboard.html')
+    if autho_login_admin():
+        return render_template('api/admin_dashboard.html',user=session['admin'])
+    else:
+        return redirect('unauthorized403',code=302)
 
 @app.route('/adminLogin', methods = ['POST']) # handle the admin login request
 def AdminLogin():
@@ -232,11 +246,24 @@ def autho_login():
     else:
         return False
 
+@app.route('/api/signup')
+def signUpForApiKey():
+    return render_template('api/signup.html')
+
+@app.route('/api/generatingKey', methods =['POST']) # path after user registers for api key
+def generateKey():
+    USERNAME = request.form.get('emailAddress')
+    GENERATED_KEY = str(uuid4())
+    calls.saveApiKey(USERNAME,GENERATED_KEY)
+    return render_template('api/signup.html',KEY=GENERATED_KEY,signup=True) # will pass back to the signup page that they have successfully signed up and display the api key
+
 @app.route('/api/student/<string:id>') #request handler for student's information
 def getStudentJson(id):
-    if not autho_login_admin():
-        return redirect(url_for('unauthorized'))
-    else:
+    api_key = request.args.get('api_key')
+    if api_key == None: # if user did not submit the form with the api key, return an error message
+        return jsonify({'Error':'API KEY IS REQUIRED'})
+    print(api_key)
+    if calls.getApiKey(api_key):
         data = calls.getStudentDataRequest(id)
         print(f'THE DATA-----------{data}')
         if not data:
@@ -248,8 +275,9 @@ def getStudentJson(id):
             'Grades':{'English':data[0][2],'Math':data[0][3],'Science':data[0][4],'History':data[0][5]}
         }
         print(student_information)
-    return jsonify(student_information)
-
+        return jsonify(student_information)
+    else:
+        return jsonify({'Error':'INVALID API KEY'})
 @app.route('/api/teacher/<int:id>') # request handler for teacher's information
 def getTeacherJson(id):
     if not autho_login_admin():
@@ -260,3 +288,34 @@ def getTeacherJson(id):
     print(data)
     teacher_information = {'Name':data[0][0],'Staff_ID':data[0][1]}
     return jsonify(teacher_information)
+
+@app.route('/api/teacher/all') # request to get list of all of the teachers in the DB
+def getAllTeachers():
+    if not autho_login_admin():
+        return redirect(url_for('unauthorized'))
+    teacher = {}
+    teacher_list = []
+    data = calls.getAllTeachers()
+    print(data)
+    for i in data:
+        name = {'Name':i[0],'Id':i[1]}
+        print(name)
+        teacher_list.append(name)
+        print(teacher_list)
+    teacher['teachers'] = teacher_list
+    return jsonify(teacher)
+
+@app.route('/api/student/all') # request to get list of all of the teachers in the DB
+def getAllStudents():
+    if not autho_login_admin():
+        return redirect(url_for('unauthorized'))
+    students = {}
+    students_list = []
+    data = calls.getAllStudents()
+    print(data)
+    for i in data:
+        details_dict = {'Name':i[0],'Teacher_id':i[1],'English':i[2],'Math':i[3],'Science':i[4],'History':i[5],'student_id':i[6]}
+        students_list.append(details_dict)
+        print(students_list)
+    students['students'] = students_list
+    return jsonify(students)

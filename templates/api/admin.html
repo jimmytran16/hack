@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+{% extends 'api/layout.html' %}
+{% block head %}
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/admin.css') }}">
-<!------ Include the above in your HEAD tag ---------->
-<body>
+{% endblock %}
+{% block content %}
   <div id="login">
       <h3 class="text-center text-white pt-5">HPS <b>API</b></h3>
       <div class="container">
@@ -34,6 +34,4 @@
   </div>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-</body>
-
-</html>
+{% endblock %}
