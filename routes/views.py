@@ -121,7 +121,6 @@ def upload():
     # convert the file to blob
     # execute query to upload image into DB
     # commit the execution
-
     # update activity log
     calls.updateActivityLog('2', 'blank',session['id'],session['fullname'])
     date_today = date.today()
@@ -195,7 +194,7 @@ def adminLogout():
 @app.route('/api/admin') #route to admin log in page
 def adminSignIn():
     if autho_login_admin():
-        return redirect('successLogin')
+        return redirect(url_for('AdminSucces'));
     else:
         return render_template('api/admin.html')
 
@@ -280,42 +279,49 @@ def getStudentJson(id):
         return jsonify({'Error':'INVALID API KEY'})
 @app.route('/api/teacher/<int:id>') # request handler for teacher's information
 def getTeacherJson(id):
-    if not autho_login_admin():
-        return redirect(url_for('unauthorized'))
-    data = calls.getTeacherDataRequest(id)
-    if not data: # if the tuple that is returned from the database is empty (no teacher matches requested)
-        return jsonify({'Message':"No Teacher's found!",'error':400})
-    print(data)
-    teacher_information = {'Name':data[0][0],'Staff_ID':data[0][1]}
-    return jsonify(teacher_information)
+    api_key = request.args.get('api_key')
+    if api_key == None: # if user did not submit the form with the api key, return an error message
+        return jsonify({'Error':'API KEY IS REQUIRED'})
+    if calls.getApiKey(api_key):
+        data = calls.getTeacherDataRequest(id)
+        if not data: # if the tuple that is returned from the database is empty (no teacher matches requested)
+            return jsonify({'Message':"No Teacher's found!",'error':400})
+        print(data)
+        teacher_information = {'Name':data[0][0],'Staff_ID':data[0][1]}
+        return jsonify(teacher_information)
+    else:
+        return jsonify({'Error':'INVALID API KEY'})
 
 @app.route('/api/teacher/all') # request to get list of all of the teachers in the DB
 def getAllTeachers():
-    if not autho_login_admin():
-        return redirect(url_for('unauthorized'))
-    teacher = {}
-    teacher_list = []
-    data = calls.getAllTeachers()
-    print(data)
-    for i in data:
-        name = {'Name':i[0],'Id':i[1]}
-        print(name)
-        teacher_list.append(name)
-        print(teacher_list)
-    teacher['teachers'] = teacher_list
-    return jsonify(teacher)
+    api_key = request.args.get('api_key')
+    if api_key == None: # if user did not submit the form with the api key, return an error message
+        return jsonify({'Error':'API KEY IS REQUIRED'})
+    if calls.getApiKey(api_key):
+        teacher = {}
+        teacher_list = []
+        data = calls.getAllTeachers()
+        for i in data:
+            name = {'Name':i[0],'Id':i[1]}
+            teacher_list.append(name)
+        teacher['teachers'] = teacher_list
+        return jsonify(teacher)
+    else:
+        return jsonify({'Error':'INVALID API KEY'})
 
 @app.route('/api/student/all') # request to get list of all of the teachers in the DB
 def getAllStudents():
-    if not autho_login_admin():
-        return redirect(url_for('unauthorized'))
-    students = {}
-    students_list = []
-    data = calls.getAllStudents()
-    print(data)
-    for i in data:
-        details_dict = {'Name':i[0],'Teacher_id':i[1],'English':i[2],'Math':i[3],'Science':i[4],'History':i[5],'student_id':i[6]}
-        students_list.append(details_dict)
-        print(students_list)
-    students['students'] = students_list
-    return jsonify(students)
+    api_key = request.args.get('api_key')
+    if api_key == None: # if user did not submit the form with the api key, return an error message
+        return jsonify({'Error':'API KEY IS REQUIRED'})
+    if calls.getApiKey(api_key):
+        students = {}
+        students_list = []
+        data = calls.getAllStudents()
+        for i in data:
+            details_dict = {'Name':i[0],'Teacher_id':i[1],'English':i[2],'Math':i[3],'Science':i[4],'History':i[5],'student_id':i[6]}
+            students_list.append(details_dict)
+        students['students'] = students_list
+        return jsonify(students)
+    else:
+        return jsonify({'Error':'INVALID API KEY'})
