@@ -19,10 +19,10 @@ app.config['MYSQL_PASSWORD'] = os.environ.get('DB_PASS')
 app.config['MYSQL_DB'] = os.environ.get('DB_NAME')
 # set up MySQL crudentials
 # LOCAL DATABASE CONFIGS
-# app.config['MYSQL_HOST'] = config.HOST_NAME
-# app.config['MYSQL_USER'] = config.DB_USER
-# app.config['MYSQL_PASSWORD'] = config.DB_PASS
-# app.config['MYSQL_DB'] = config.DB_NAME
+# app.config['MYSQL_HOST'] = config.R_HOST_NAME
+# app.config['MYSQL_USER'] = config.R_DB_USER
+# app.config['MYSQL_PASSWORD'] = config.R_DB_PASS
+# app.config['MYSQL_DB'] = config.R_DB_NAME
 
 
 # init a mysql object
@@ -32,4 +32,5 @@ from routes.views import *
 
 # condition to run the app.py
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(debug=False)
