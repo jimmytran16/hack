@@ -4,7 +4,7 @@ from flask import Flask
 from flask_mysqldb import MySQL
 import os
 
-# import config #comment OUT when deploying ----------------------------------------------------------------------------------!!
+import config #comment OUT when deploying ----------------------------------------------------------------------------------!!
 from db import calls
 # init flask
 app = Flask(__name__)
@@ -17,6 +17,7 @@ app.config['MYSQL_HOST'] = os.environ.get('HOST_NAME')
 app.config['MYSQL_USER'] = os.environ.get('DB_USER')
 app.config['MYSQL_PASSWORD'] = os.environ.get('DB_PASS')
 app.config['MYSQL_DB'] = os.environ.get('DB_NAME')
+
 # set up MySQL crudentials
 # LOCAL DATABASE CONFIGS
 # app.config['MYSQL_HOST'] = config.R_HOST_NAME
@@ -24,11 +25,11 @@ app.config['MYSQL_DB'] = os.environ.get('DB_NAME')
 # app.config['MYSQL_PASSWORD'] = config.R_DB_PASS
 # app.config['MYSQL_DB'] = config.R_DB_NAME
 
-
 # init a mysql object
 mysql = MySQL(app)
 # -----------------------------------
-from routes.views import *
+from routes.views import * #import the app's views
+from routes.views_api import * #import all the api views
 
 # condition to run the app.py
 if __name__ == '__main__':

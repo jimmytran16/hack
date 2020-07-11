@@ -1,6 +1,7 @@
 {% extends 'api/layout.html' %}
 {% block head %}
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>HPS API</title>
     <style media="screen">
@@ -10,7 +11,31 @@
     .sign-up{
       float: right;
     }
+    .img_container{
+      margin: 20px;
+    }
+    .img_container p{
+      text-decoration: underline;
+      font-size: 20px;
+    }
     </style>
   {% endblock %}
   {% block content %}
+  <div class="container">
+    <div class="img_container">
+      <p><strong>Step 1:</strong> Go to the Sign Up For API Key menu </p>
+      <img src="{{ url_for('static',filename='img/apistep1.png') }}"  width="100%" alt="">
+      <p><strong>Step 2:</strong> Put in your email address and submit to get an API Key </p>
+      <img src="{{ url_for('static',filename='img/apistep2.png') }}" width="100%" alt="">
+      <p><strong>Step 3:</strong> Get your data through endpoints </p>
+      <h2><strong>API Endpoints:</strong></h2>
+      <ul>
+        <li>Get Specific Student - http://app-hps.herokuapp.com/api/student/[student_id]?api_key=[YOUR_API_KEY]</li>
+        <li>Get All Students - http://app-hps.herokuapp.com/api/student/all?api_key=[your API key]</li>
+        <li>Get Specfic teacher - http://app-hps.herokuapp.com/api/teacher/[teacher_id]?api_key=[your API key]</li>
+        <li>Get all Teachers - http://app-hps.herokuapp.com/api/teacher/all?api_key=[your API key]</li>
+      </ul>
+
+    </div>
+  </div>
   {% endblock %}
