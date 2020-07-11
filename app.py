@@ -4,7 +4,7 @@ from flask import Flask
 from flask_mysqldb import MySQL
 import os
 
-import config #comment OUT when deploying ----------------------------------------------------------------------------------!!
+#import config #comment OUT when deploying ----------------------------------------------------------------------------------!!
 from db import calls
 # init flask
 app = Flask(__name__)
