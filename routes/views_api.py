@@ -61,15 +61,6 @@ def autho_login_admin(): # func to determine if admin is logged in
     else:
         return False
 
-def autho_login():
-    # session variable 'fullname' is not assigned when user first runs the app
-    if not session.get('fullname'):
-        return False
-    elif session['fullname'] != None:
-        return True
-    else:
-        return False
-
 @app.route('/api/signup')
 def signUpForApiKey():
     return render_template('api/signup.html')

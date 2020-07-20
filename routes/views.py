@@ -177,6 +177,15 @@ def login():
                 return render_template('index.html', error=True, message=err_msg)
     return render_template('index.html', error=True, message=err_msg)
 
+def autho_login():
+    # session variable 'fullname' is not assigned when user first runs the app
+    if not session.get('fullname'):
+        return False
+    elif session['fullname'] != None:
+        return True
+    else:
+        return False
+
 @app.route('/logout')
 def logout():
     session['fullname'] = None
