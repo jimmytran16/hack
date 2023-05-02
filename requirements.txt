@@ -1,4 +1,4 @@
 passlib==1.7.2
 Flask_MySQLdb==0.2.0
-Flask==1.1.1
+Flask==2.2.5
 gunicorn==20.0.4
